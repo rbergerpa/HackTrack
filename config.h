@@ -39,7 +39,7 @@
 // - Cars:       9
 // - Home:       0
 // - IGate:      5
-#define S_CALLSIGN      "MYCALL"
+#define S_CALLSIGN      "N3EMO"
 #define S_CALLSIGN_ID   11
 
 // Destination callsign: APRS (with SSID=0) is usually okay.
@@ -56,7 +56,7 @@
 // APRS comment: this goes in the comment portion of the APRS message. You
 // might want to keep this short. The longer the packet, the more vulnerable
 // it is to noise. 
-#define APRS_COMMENT    "Trackuino reminder: replace callsign with your own"
+#define APRS_COMMENT    ""
 
 
 // --------------------------------------------------------------------------
@@ -82,8 +82,8 @@
 // respectively. The first balloon will transmit at 00:00:00, 00:01:00, 
 // 00:02:00, etc. amd the second balloon will transmit at 00:00:30, 00:01:30,
 // 00:02:30, etc.
-#define APRS_SLOT     0     // seconds. -1 disables slotted transmissions
-#define APRS_PERIOD   60    // seconds
+#define APRS_SLOT     -1     // seconds. -1 disables slotted transmissions
+#define APRS_PERIOD   5    // seconds
 
 // GPS baud rate (in bits per second). This is also the baud rate at which
 // debug data will be printed out the serial port.
@@ -99,6 +99,9 @@
 // Pin 11 doubles as MOSI, so I suggest using pin 3 for PWM and leave 11 free
 // in case you ever want to interface with an SPI device.
 #define AUDIO_PIN       3
+// RWB
+#define DAC_CS_PIN 9
+#define DAC_GAIN 2
 
 // --------------------------------------------------------------------------
 // Radio config (radio_hx1.cpp)
@@ -179,7 +182,7 @@
 #define BUZZER_ALTITUDE         3000.0  // meters (1 ft = 0.3048 m)
 
 // The options here are pin 9 or 10
-#define BUZZER_PIN              9
+#define BUZZER_PIN              4
 
 // --------------------------------------------------------------------------
 // Debug
@@ -188,7 +191,7 @@
 // This is the LED pin (13 on Arduinos). The LED will be on while the AVR is
 // running and off while it's sleeping, so its brightness gives an indication
 // of the CPU activity.
-#define LED_PIN                 13
+#define LED_PIN                 5
 
 // Debug info includes printouts from different modules to aid in testing and
 // debugging.

@@ -15,8 +15,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #ifdef AVR
-
 #include "config.h"
+
+// RWB this file's  use of Timer 1 conflicts with Tone4921 -- fix  with a callback
+#ifndef DAC_CS_PIN
+
 #include "buzzer.h"
 #include "pin.h"
 #include <Arduino.h>
@@ -107,4 +110,6 @@ ISR (TIMER1_OVF_vect)
   }
 }
 
-#endif // #ifdef AVR
+
+#endif // DAC_CS_PIN
+#endif // AVR

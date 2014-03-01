@@ -57,16 +57,18 @@ void power_save()
    * to drive the buzzer and timer2 to keep pwm output at its rest
    * voltage.
    */
-
   set_sleep_mode(SLEEP_MODE_IDLE);
   sleep_enable();
   power_adc_disable();
-  power_spi_disable();
+  // RWB Temp cuz it's stopping our DAC
+ // power_spi_disable();
   power_twi_disable();
 
-  pin_write(LED_PIN, LOW);
+  // RWB TEMP disable
+  // pin_write(LED_PIN, LOW);
   sleep_mode();    // Go to sleep
-  pin_write(LED_PIN, HIGH);
+ // RWB TEMP disable
+  // pin_write(LED_PIN, HIGH);
   
   sleep_disable();  // Resume after wake up
   power_all_enable();

@@ -15,6 +15,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #ifdef AVR
+#include "config.h"
+#ifndef DAC_CS_PIN
 
 #include "afsk_avr.h"
 #include <avr/interrupt.h>
@@ -27,4 +29,5 @@ ISR(TIMER2_OVF_vect)
   afsk_isr();
 }
 
-#endif // ifdef PIC32MX
+#endif // DAC_CS_PIN
+#endif // AVRX

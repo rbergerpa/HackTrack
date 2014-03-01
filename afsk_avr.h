@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <avr/pgmspace.h>
 #include "config.h"
+#ifndef DAC_CS_PIN
 
 // Exported consts
 extern const uint32_t MODEM_CLOCK_RATE;
@@ -33,7 +34,7 @@ extern const uint32_t PLAYBACK_RATE;
 // Exported vars
 extern const prog_uchar afsk_sine_table[];
 
-// Inline functions (this saves precious cycles in the ISR)
+// Inline functions (this saves precious cycles in the ISR)`
 #if AUDIO_PIN == 3
 #  define OCR2 OCR2B
 #endif
@@ -82,4 +83,5 @@ void afsk_debug();
 #endif
 
 #endif
+#endif // DAC_CS_PIN
 #endif // AVR

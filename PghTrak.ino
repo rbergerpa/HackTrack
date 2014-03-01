@@ -15,32 +15,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-// Mpide 22 fails to compile Arduino code because it stupidly defines ARDUINO 
-// as an empty macro (hence the +0 hack). UNO32 builds are fine. Just use the
-// real Arduino IDE for Arduino builds. Optionally complain to the Mpide
-// authors to fix the broken macro.
-#if (ARDUINO + 0) == 0
-#error "Oops! We need the real Arduino IDE (version 22 or 23) for Arduino builds."
-#error "See trackuino.pde for details on this"
-
-// Refuse to compile on arduino version 21 or lower. 22 includes an 
-// optimization of the USART code that is critical for real-time operation
-// of the AVR code.
-#elif (ARDUINO + 0) < 22
-#error "Oops! We need Arduino 22 or 23"
-#error "See trackuino.pde for details on this"
-
-// Arduino 1.0+ introduced backwards-incompatible changes in the serial lib.
-#elif (ARDUINO + 1) >= 100
-#error "Ooops! We don't support Arduino 1.0+ (yet). Please use 22 or 23"
-#error "See trackuino.pde for details on this"
-
-#endif
-
-
 // Trackuino custom libs
 #include "config.h"
 #include "afsk_avr.h"
+#include "afsk_avr_dac.h"
 #include "afsk_pic32.h"
 #include "aprs.h"
 #include "buzzer.h"
@@ -49,6 +27,10 @@
 #include "power.h"
 #include "sensors_avr.h"
 #include "sensors_pic32.h"
+
+// upport for MCP4921 DAC (RWB)
+#include <SPI.h>
+#include <Tone4921.h>
 
 // Arduino/AVR libs
 #include <Wire.h>
@@ -61,6 +43,7 @@ static const uint32_t VALID_POS_TIMEOUT = 2000;  // ms
 static int32_t next_aprs = 0;
 
 
+
 void setup()
 {
   pinMode(LED_PIN, OUTPUT);
@@ -71,9 +54,12 @@ void setup()
   Serial.println("RESET");
 #endif
 
-  buzzer_setup();
+// RWB
+//   buzzer_setup();
+
   afsk_setup();
   gps_setup();
+
   sensors_setup();
 
 #ifdef DEBUG_SENS
@@ -113,24 +99,25 @@ void get_pos()
       valid_pos = gps_decode(Serial.read());
   } while ( (millis() - timeout < VALID_POS_TIMEOUT) && ! valid_pos) ;
 
-  if (valid_pos) {
-    if (gps_altitude > BUZZER_ALTITUDE) {
-      buzzer_off();   // In space, no one can hear you buzz
-    } else {
-      buzzer_on();
-    }
-  }
+// rwb
+//  if (valid_pos) {
+//    if (gps_altitude > BUZZER_ALTITUDE) {
+//     buzzer_off();   // In space, no one can hear you buzz
+//    } else {
+//      buzzer_on();
+//    }
+//  }
 }
 
 void loop()
 {
-  // Time for another APRS frame
+ // Time for another APRS frame
   if ((int32_t) (millis() - next_aprs) >= 0) {
     get_pos();
     aprs_send();
     next_aprs += APRS_PERIOD * 1000L;
-    while (afsk_busy()) ;
-      power_save();
+ 
+ while (afsk_busy()) ;
 
 #ifdef DEBUG_MODEM
     // Show modem ISR stats from the previous transmission
@@ -138,5 +125,5 @@ void loop()
 #endif
   }
 
-  power_save(); // Incoming GPS data or interrupts will wake us up
+//  power_save(); // Incoming GPS data or interrupts will wake us up
 }

@@ -18,6 +18,8 @@
 #ifndef __AX25_H__
 #define __AX25_H__
 
+#include "afsk_avr_dac.h"
+
 struct s_address {
 	char callsign[7];
 	unsigned char ssid;

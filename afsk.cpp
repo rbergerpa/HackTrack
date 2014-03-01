@@ -29,11 +29,13 @@
  */
 
 #include "config.h"
+#ifndef DAC_CS_PIN
+
 #include "afsk_avr.h"
 #include "afsk_pic32.h"
 #include "pin.h"
 #include "radio_hx1.h"
-#include <Arduino.h>
+#include <WProgram.h>
 #include <stdint.h>
 
 // Module consts
@@ -198,3 +200,5 @@ void afsk_debug()
   overruns = 0;
 }
 #endif
+
+#endif // DAC_CS_PIN
