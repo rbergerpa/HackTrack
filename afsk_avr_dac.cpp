@@ -20,7 +20,6 @@
 // RWB todo make cnditional on AVR_DAC4921
 #ifdef AVR
 #include "config.h"
-#ifdef DAC_CS_PIN
 
 #include "afsk_avr.h"
 #include "afsk_pic32.h"
@@ -30,8 +29,8 @@
 #include <stdint.h>
 #include <Tone4921.h>
 
-static const uint32_t SAMPLE_RATE = 144000;
-Tone4921 toneGen(DAC_CS_PIN, SAMPLE_RATE);
+static const uint32_t SAMPLE_RATE = 12000;
+Tone4921 toneGen(SAMPLE_RATE);
 
 // Module consts
 static const uint16_t BAUD_RATE       = 1200;
@@ -71,7 +70,6 @@ void afsk_setup()
   radio.setup();
   toneGen.setCallback(&afsk_callback);
   toneGen.setGain(DAC_GAIN);
-  toneGen.start();
 }
 
 void afsk_send(const uint8_t *buffer, int len)
@@ -91,6 +89,7 @@ void afsk_start() {
   toneGen.setFrequency(1200);
   sendHighTone = false;
   toneGen.setEnabled(true);
+  toneGen.start();
   
   // Key the radio
   radio.ptt_on();
@@ -101,6 +100,7 @@ void afsk_stop() {
   go = false;
   radio.ptt_off();    // Release PTT
   pin_write(LED_PIN, LOW);
+  toneGen.stop();
   toneGen.setEnabled(false);
 }
 
@@ -135,7 +135,6 @@ void afsk_callback()
   }
 }
 
-#endif // DAC_CS_PIN
 #endif // AVR
 
  
